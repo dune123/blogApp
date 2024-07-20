@@ -1,15 +1,20 @@
-import express from "express"
-import bodyParser from "body-parser";
-import mongoose from "mongoose";
-import dotenv from "dotenv"
-import cors from "cors"
-dotenv.config();
+const express=require('express')
+const bodyParser=require('body-parser')
+const mongoose=require('mongoose')
+const dotenv=require('dotenv')
+const cors=require('cors')
+const authRoutes=require("./routes/authRoutes")
+dotenv.config()
 
 const app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.json());
 app.use(cors());
+
+//Routes
+app.use("/api/auth",authRoutes)
 
 app.listen(process.env.PORT, () => {
     console.log(`listening on ${process.env.PORT}`);
