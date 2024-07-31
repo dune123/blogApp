@@ -36,6 +36,92 @@ const signUp=async(req,res,next)=>{
     }
 }
 
+const signIn=async(req, res, next) => {
+    try {
+        const {email,password}=req.body;
+
+        if(!email||!password||email===""||password===""){
+            return res.status(400).json({message:"All fields are required"})
+        }
+
+        const validUser=await User.findOne({email})
+
+        if(!validUser){
+            return res.status(400).json({message:"User not found"})
+        }
+
+        //this is an async operation
+        const validPassword=await bcrypt.compare(password,validUser.password)
+
+        if(!validPassword){
+            return res.status(400).json({message:"Invalid credentials"})
+        }
+
+        const token=jwt.sign(
+            {
+                user: validUser._id,
+                isAdmin: validUser.isAdmin
+              },
+              process.env.JWT_SECRET_KEY,
+              { expiresIn: "7d" }
+        )
+
+        return res.status(201).json({
+            success: true,
+            token,
+            userId: validUser._id,
+            username: validUser.username,
+            email:validUser.email
+          });
+    } catch (error) {
+        errorHandler(res,error)
+    }
+}
+
+export const google=async (req,res,next)=>{
+    const {email,name,googlePhotoUrl}=req.body;
+    try {
+        const validUser=await User.findOne({email})
+
+        if(validUser){
+            const token=jwt.sign(
+                {
+                    user: validUser._id,
+                    isAdmin:validUser.isAdmin
+                  },
+                  process.env.JWT_SECRET_KEY,
+                  { expiresIn: "7d" }
+            )
+            const {password,...rest}=validUser._doc;
+            res.status(200).json({rest,token})
+        }else{
+            const generatePassword=Math.random().toString(36).slice(-8)+Math.random().toString(36).slice(-8);
+            const hashedPassword=bcrypt.hash(generatePassword)
+
+            const newUser=new User({
+                username:name.toLowerCase().split(' ').join('')+Math.random().toString(9).slice(-4),
+                email,
+                password:hashedPassword,
+                profilePicture:googlePhotoUrl
+            })
+            await newUser.save()
+            const token=jwt.sign(
+                {
+                    user: newUser._id,
+                    isAdmin:newUser.isAdmin
+                  },
+                  process.env.JWT_SECRET_KEY,
+                  { expiresIn: "7d" }
+            )
+            const {password,...rest}=newUser._doc;
+            res.status(200).json({rest,token})
+        }     
+    } catch (error) {
+        errorHandler(res,error)
+    }
+}
+
 module.exports={
-    signUp
+    signUp,
+    signIn
 }

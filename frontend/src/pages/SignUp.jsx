@@ -1,24 +1,42 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { Button, Label, TextInput } from 'flowbite-react';
+import { Link, useNavigate } from 'react-router-dom'
+import { Alert, Button, Label, Spinner, TextInput } from 'flowbite-react';
 import axios from 'axios';
+import OAuth from '../components/OAuth';
 
 export default function SignUp(){
   const [formData,setFormData]=useState({})
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [loading,setLoading]=useState(false)
+  const navigate=useNavigate()
   const handleChange=(e)=>{
-    setFormData({...formData,[e.target.id]:e.target.value})
+    setFormData({...formData,[e.target.id]:e.target.value.trim()})
   }
 
   const handleSubmit=async(e)=>{
     e.preventDefault();
+    if(!formData.username||!formData.email||!formData.password){
+      return setErrorMessage("Please fill out all fields")
+    }
     try {
+      setLoading(true)
+      setErrorMessage(null)
       const res=await axios.post("http://localhost:3000/api/auth/signup",
         formData
       )
 
-      console.log(res.data)
+      if(res.status!==200){
+        return setErrorMessage(res.data.message)
+      }
+      else{
+        navigate("/sign-in")
+      }
+      setLoading(false)
+      
     } catch (error) {
-      console.log(error)
+      //this is client side error 
+      setErrorMessage(error.message);
+      setLoading(false);
     }
   }
   
@@ -51,9 +69,19 @@ export default function SignUp(){
               <Label value="Your password"/>
               <TextInput type="password" placeholder='Password' id="password" onChange={handleChange}/>
             </div>
-            <Button gradientDuoTone='purpleToPink' type="submit" onClick={handleSubmit}>
-              Sign Up
+            <Button gradientDuoTone='purpleToPink' type="submit" onClick={handleSubmit} disabled={loading}>
+              {
+                loading?(
+                  <>
+                    <Spinner size='sm'/>
+                    <span className='pl-3'>Loading...</span>
+                  </>
+                ):(
+                  "Sign Up"
+                )
+              }
             </Button>
+            <OAuth/>
           </form>
           <div className='flex gap-2 text-sm' style={{marginTop:"1.2rem"}}>
             <span>Have an account?</span>
@@ -61,6 +89,13 @@ export default function SignUp(){
               Sign In
             </Link>
           </div>
+          {
+            errorMessage&&(
+              <Alert style={{marginTop:"1.2rem"}} color="failure">
+                {errorMessage}
+              </Alert>
+            )
+          }
         </div>
       </div>
     </div>
