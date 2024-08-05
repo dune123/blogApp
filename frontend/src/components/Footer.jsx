@@ -11,8 +11,7 @@ const FooterComp = () => {
       style={{
         border: "1px solid teal",
         borderTopWidth: "8px",
-        borderColor: "teal",
-        marginTop:"12rem"
+        borderColor: "teal"
       }}
     >
       <div className="w-full max-w-7xl mx-auto">

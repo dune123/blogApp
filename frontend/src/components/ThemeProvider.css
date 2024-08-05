@@ -1,0 +1,19 @@
+/* styles.css */
+
+/* Light Theme */
+.light .theme-container {
+    background-color: white;
+    color: gray;
+  }
+  
+  /* Dark Theme */
+  .dark .theme-container {
+    background-color: rgb(16, 23, 42);
+    color: gray;
+  }
+  
+  /* Shared Styles */
+  .theme-container {
+    min-height: 100vh;
+  }
+  

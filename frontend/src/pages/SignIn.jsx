@@ -30,7 +30,8 @@ const SignIn = () => {
         dispatch(signInFailure(res.data.message))
       }
       else{
-        dispatch(signInSuccess(res.data))
+        dispatch(signInSuccess(res.data.rest))
+        window.localStorage.setItem('token',res.data.token)
         navigate("/")
       }
       

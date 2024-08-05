@@ -65,20 +65,19 @@ const signIn=async(req, res, next) => {
               process.env.JWT_SECRET_KEY,
               { expiresIn: "7d" }
         )
-
+        
+        const {password:pass,...rest}=validUser._doc
         return res.status(201).json({
             success: true,
             token,
-            userId: validUser._id,
-            username: validUser.username,
-            email:validUser.email
+            rest
           });
     } catch (error) {
         errorHandler(res,error)
     }
 }
 
-export const google=async (req,res,next)=>{
+const googleAuth=async (req,res,next)=>{
     const {email,name,googlePhotoUrl}=req.body;
     try {
         const validUser=await User.findOne({email})
@@ -121,7 +120,34 @@ export const google=async (req,res,next)=>{
     }
 }
 
+const signOut=async(req,res,next)=>{
+    try {
+        const { userId } = req.body;
+
+        const findUser = User.findById({ userId });
+        console.log(userId)
+        console.log(findUser)
+        const token = jwt.sign(
+          {
+            user: userId,
+          },
+          process.env.JWT_SECRET_KEY,
+          { expiresIn: 0 }
+        );
+    
+        res.status(200).json({  success: true,
+            token,
+            userId: findUser._id,
+            username: findUser.username,
+            email: findUser.email,});
+    } catch (error) {
+        errorHandler(res,error);
+    }
+}
+
 module.exports={
     signUp,
-    signIn
+    signIn,
+    signOut,
+    googleAuth
 }
