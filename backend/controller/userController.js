@@ -1,5 +1,5 @@
 const User = require("../models/userModel");
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const errorHandler = (res, error) => {
@@ -8,30 +8,37 @@ const errorHandler = (res, error) => {
 };
 
 const updateUser = async (req, res, next) => {
-
   if (req.user !== req.params.userId) {
-    return res.status(403).json({ message: "You are not allowed to update this user" });
+    return res
+      .status(403)
+      .json({ message: "You are not allowed to update this user" });
   }
 
   if (req.body.password) {
     if (req.body.password.length < 6) {
-      return res.status(400).json({ message: "Password must be at least 6 characters" });
+      return res
+        .status(400)
+        .json({ message: "Password must be at least 6 characters" });
     }
     req.body.password = await bcrypt.hash(req.body.password, 10);
   }
 
   if (req.body.username) {
     if (req.body.username.length < 7 || req.body.username.length > 20) {
-      return res.status(400).json({ message: "Username must be between 7 and 20 characters" });
+      return res
+        .status(400)
+        .json({ message: "Username must be between 7 and 20 characters" });
     }
-    if (req.body.username.includes(' ')) {
+    if (req.body.username.includes(" ")) {
       return res.status(400).json({ message: "Username cannot contain space" });
     }
     if (req.body.username !== req.body.username.toLowerCase()) {
       return res.status(400).json({ message: "Username must be lowercase" });
     }
     if (!req.body.username.match(/^[a-zA-Z0-9]+$/)) {
-      return res.status(400).json({ message: "Username can only contain letters and numbers" });
+      return res
+        .status(400)
+        .json({ message: "Username can only contain letters and numbers" });
     }
   }
 
@@ -43,8 +50,8 @@ const updateUser = async (req, res, next) => {
           username: req.body.username,
           email: req.body.email,
           profilePicture: req.body.profilePicture,
-          password: req.body.password
-        }
+          password: req.body.password,
+        },
       },
       { new: true }
     );
@@ -53,8 +60,23 @@ const updateUser = async (req, res, next) => {
   } catch (error) {
     errorHandler(res, error);
   }
-}
+};
+
+const deleteUser = async (req, res, next) => {
+  /*if (!req.user.isAdmin && req.user != req.params.userId) {
+    return res
+      .status(403)
+      .json({ message: "You are not allowed to delete this user" });
+  }*/
+  try {
+    await User.findByIdAndDelete(req.params.userId)
+    res.status(200).json({message:'User has been deleted'})
+  } catch (error) {
+    errorHandler(res, error);
+  }
+};
 
 module.exports = {
-  updateUser
+  updateUser,
+  deleteUser
 };
