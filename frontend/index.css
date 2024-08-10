@@ -3,3 +3,11 @@
 @tailwind utilities;
 
 @import 'flowbite-react/dist/flowbite.css';
+
+body{
+    height:100vh;
+}
+
+.ql-editor{
+    font-size:1.05rem;
+}

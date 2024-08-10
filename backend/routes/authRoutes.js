@@ -5,7 +5,7 @@ const router=express.Router()
 
 router.post("/signup",signUp)
 router.post("/signin",signIn)
-router.post("/signout",requireAuth,signOut)
+router.post("/signout",signOut)
 router.post("/googleAuth",googleAuth)
 
 module.exports=router
