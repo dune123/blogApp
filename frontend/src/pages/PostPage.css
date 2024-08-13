@@ -1,0 +1,52 @@
+.postContent{
+  padding: 0.75rem;         
+  max-width: 42rem;          
+  margin: auto;              
+  width: 100%;  
+}
+
+.postContent p{
+    margin-bottom: 0.5rem;
+}
+
+.postContent h1{
+    font-size: 1.5rem;
+    font-weight: 600;
+    font-family: sans-serif;
+    margin: 1.5rem 0;
+    color:black
+}
+
+.postContent h2{
+    font-size: 1.4rem;
+    font-family: sans-serif;
+    margin:1.5rem 0;
+}
+
+.postContent strong{
+    font-size: 1rem;
+    font-weight: 600;
+    font-family: sans-serif;
+    margin: 1.5rem 0;
+    color:rgb(51, 49, 49);
+}
+
+.postContent li{
+    margin-bottom: 0.5rem;
+}
+
+.postContent a{
+    color:rgb(73,149,199);
+    text-decoration: none;
+}
+
+.postContent a:hover{
+    text-decoration: underline;
+}
+
+.dark .postContent a{
+    color:red;
+}
+
+
+
