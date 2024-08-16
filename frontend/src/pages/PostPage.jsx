@@ -3,6 +3,8 @@ import { Button, Spinner } from 'flowbite-react'
 import React, { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import './PostPage.css'
+import CallToAction from './CallToAction'
+import CommentSection from '../components/CommentSection'
 
 const PostPage = () => {
   const postSlug=useParams()
@@ -44,7 +46,7 @@ const PostPage = () => {
       </div>
     )
   }
-  
+  console.log(post)
   return (
     <main className='p-3 flex flex-col max-w-6xl mx-auto min-h-screen'>
       <h1 className='text-3xl mt-10 p-3 text-center font-serif max-w-2xl mx-auto lg:text-4xl'>{post&&post.title}</h1>
@@ -61,6 +63,10 @@ const PostPage = () => {
       <div className='postContent' dangerouslySetInnerHTML={{__html:post && post.content}} >
 
       </div>
+      <div className='max-w-4xl mx-auto w-full'>
+        <CallToAction/>
+      </div>
+      <CommentSection postId={post._id}/>
     </main>
   )
 }

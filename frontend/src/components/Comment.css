@@ -1,0 +1,16 @@
+.like{
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+}
+
+.like:hover{
+    color:#03c9d7;
+}
+
+.edit{
+    color:gray;
+}
+
+.edit:hover{
+    color:#3866d6;
+}

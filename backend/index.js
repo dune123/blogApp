@@ -6,6 +6,7 @@ const cors=require('cors')
 const authRoutes=require("./routes/authRoutes")
 const userRoutes=require("./routes/userRoutes")
 const postRoutes=require("./routes/postRoutes")
+const commentRoutes=require("./routes/commentRoutes")
 dotenv.config()
 
 const app = express();
@@ -19,6 +20,7 @@ app.use(cors());
 app.use("/api/auth",authRoutes)
 app.use("/api/user",userRoutes)
 app.use("/api/post",postRoutes)
+app.use("/api/comment",commentRoutes)
 
 app.listen(process.env.PORT, () => {
     console.log(`listening on ${process.env.PORT}`);
