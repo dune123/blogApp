@@ -48,5 +48,17 @@
     color:red;
 }
 
+.PostCardContainer{
+    display: flex;
+    gap:1rem;
+    justify-content: center;
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+/* flex-wrap: wrap;
+    gap: 1.25rem;
+    margin-top: 1.25rem;
+    justify-content: center;*/
 
 

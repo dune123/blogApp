@@ -5,6 +5,7 @@ import { Link, useParams } from 'react-router-dom'
 import './PostPage.css'
 import CallToAction from './CallToAction'
 import CommentSection from '../components/CommentSection'
+import PostCard from '../components/PostCard'
 
 const PostPage = () => {
   const postSlug=useParams()
@@ -39,6 +40,21 @@ const PostPage = () => {
     fetchPost();
   },[postSlug])
 
+  useEffect(()=>{
+    try {
+      const fetchRecentPosts=async()=>{
+        const res=await axios.get('http://localhost:3000/api/post/getPosts?limit=3')
+
+        if(res.status===200){
+          setRecentPosts(res.data.posts);
+        }
+      }
+      fetchRecentPosts();
+    } catch (error) {
+      console.log(error.message);
+    }
+  },[])
+
   if(loading){
     return (
       <div className='flex justify-center items-center min-h-screen'>
@@ -67,6 +83,18 @@ const PostPage = () => {
         <CallToAction/>
       </div>
       <CommentSection postId={post._id}/>
+      <div className='flex flex-col justify-center items-center mb'>
+        <h1 className='text-xl mt-5'>
+          Recent articles
+        </h1>
+        <div className='PostCardContainer'>
+          {
+            recentPosts && recentPosts.map((post)=>(
+              <PostCard key={post._id} post={post}/>
+            ))
+          }
+        </div>
+      </div>
     </main>
   )
 }
