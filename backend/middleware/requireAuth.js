@@ -4,7 +4,7 @@ dotenv.config()
 
 const requireAuth=(req,res,next)=>{
     const authHeader=req.header("Authorization")
-    console.log(authHeader)
+    //console.log(authHeader)
     if(!authHeader){
         return res.status(401).json({ message: "Unauthorized" });
     }

@@ -1,0 +1,27 @@
+.itemContainer{
+    display: flex;
+    padding-left:10rem;
+    gap:2rem;
+    padding-top: 1.5rem;        
+    justify-content: center;                   
+}
+
+.DetailCont{
+    display: flex;   
+    flex-wrap: wrap;             
+    gap: 1rem;              
+    padding-top: 0.75rem;   
+    padding-bottom: 0.75rem; 
+    margin-left: auto;       
+    margin-right: auto;  
+}
+
+@media only screen and (max-width: 600px){
+    .itemContainer{
+        padding-left: 0rem;
+        display: flex;
+        flex-direction: column;
+        gap:2rem;
+    }
+}
+
